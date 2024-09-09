@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards, UsePipes } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -48,5 +48,15 @@ export class UsersController {
   @Post('/ban')
   ban(@Body() dto: BanUserDto) {
     return this.usersService.ban(dto)
+  }
+
+
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Delete('/:id')
+  deleteUser(@Param('id') id: number) {
+    return this.usersService.deleteUserById(id);
   }
 }
